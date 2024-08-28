@@ -182,6 +182,10 @@
             <p>Upload Speed: <span id="uploadAnalysis" class="analysis-result"></span></p>
             <p>Overall Gaming Experience: <span id="overallAnalysis" class="analysis-result"></span></p>
         </div>
+        <div class="analysis">
+            <h2>Video Streaming Analysis</h2>
+            <p>Maximum Video Resolution: <span id="videoResolution" class="analysis-result"></span></p>
+        </div>
     </div>
 
     <script>
@@ -211,6 +215,7 @@
             await testLoadedLatency();
 
             analyzeForGaming(unloadedLatency, downloadSpeed, uploadSpeed);
+            analyzeForVideoResolution(downloadSpeed);
 
             startButton.disabled = false;
             statusElement.textContent = 'Test completed!';
@@ -322,6 +327,22 @@
             const overallRating = getOverallRating(latencyRating, downloadRating, uploadRating);
             document.getElementById('overallAnalysis').textContent = overallRating;
             document.getElementById('overallAnalysis').className = `analysis-result ${overallRating.toLowerCase().replace(' ', '-')}`;
+        }
+
+        function analyzeForVideoResolution(downloadSpeed) {
+            const resolutions = [
+                { resolution: "8K (7680x4320)", minSpeed: 100 },
+                { resolution: "4K (3840x2160)", minSpeed: 25 },
+                { resolution: "1080p (1920x1080)", minSpeed: 5 },
+                { resolution: "720p (1280x720)", minSpeed: 3.5 },
+                { resolution: "480p (854x480)", minSpeed: 1 },
+                { resolution: "360p (640x360)", minSpeed: 0.5 },
+                { resolution: "240p (426x240)", minSpeed: 0.3 },
+                { resolution: "144p (256x144)", minSpeed: 0.1 }
+            ];
+
+            let maxResolution = resolutions.find(res => downloadSpeed >= res.minSpeed)?.resolution || "Unknown";
+            document.getElementById('videoResolution').textContent = maxResolution;
         }
 
         function getRating(value, thresholds) {
