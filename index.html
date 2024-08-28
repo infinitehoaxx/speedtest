@@ -1,193 +1,238 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Speed Test</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background-color: #f0f0f0;
-            color: #333;
-        }
-        .container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            max-width: 500px;
-            width: 100%;
-        }
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-        }
-        .test-container {
-            margin-bottom: 20px;
-        }
-        .test-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .test-type {
-            font-size: 18px;
-            font-weight: bold;
-        }
-        .speed-result {
-            font-size: 24px;
-            font-weight: bold;
-            color: #2980b9;
-        }
-        .progress-bar {
-            width: 100%;
-            background-color: #ecf0f1;
-            border-radius: 5px;
-            overflow: hidden;
-        }
-        .progress-bar-fill {
-            width: 0%;
-            height: 10px;
-            background-color: #3498db;
-            transition: width 0.5s;
-        }
-        button {
-            background-color: #2ecc71;
-            border: none;
-            color: white;
-            padding: 10px 20px;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-            font-size: 16px;
-            margin: 20px auto 0;
-            cursor: pointer;
-            border-radius: 5px;
-            transition: background-color 0.3s;
-        }
-        button:hover {
-            background-color: #27ae60;
-        }
-        #status {
-            text-align: center;
-            margin-top: 10px;
-            font-style: italic;
-        }
-    </style>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Speed Test with Dark Mode</title>
+		<style>
+				body {
+						font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+						display: flex;
+						justify-content: center;
+						align-items: center;
+						height: 100vh;
+						margin: 0;
+						transition: background-color 0.3s, color 0.3s;
+				}
+				body.light-mode {
+						background-color: #f0f0f0;
+						color: #333;
+				}
+				body.dark-mode {
+						background-color: #222;
+						color: #f0f0f0;
+				}
+				.container {
+						background-color: white;
+						padding: 2rem;
+						border-radius: 15px;
+						box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+						max-width: 500px;
+						width: 100%;
+						transition: background-color 0.3s, box-shadow 0.3s;
+				}
+				.dark-mode .container {
+						background-color: #333;
+						box-shadow: 0 4px 6px rgba(255,255,255,0.1);
+				}
+				h1 {
+						text-align: center;
+						color: #2c3e50;
+				}
+				.dark-mode h1 {
+						color: #ecf0f1;
+				}
+				.test-container {
+						margin-bottom: 20px;
+				}
+				.test-header {
+						display: flex;
+						justify-content: space-between;
+						align-items: center;
+						margin-bottom: 10px;
+				}
+				.test-type {
+						font-size: 18px;
+						font-weight: bold;
+				}
+				.speed-result {
+						font-size: 24px;
+						font-weight: bold;
+						color: #2980b9;
+				}
+				.dark-mode .speed-result {
+						color: #3498db;
+				}
+				.progress-bar {
+						width: 100%;
+						background-color: #ecf0f1;
+						border-radius: 5px;
+						overflow: hidden;
+				}
+				.dark-mode .progress-bar {
+						background-color: #2c3e50;
+				}
+				.progress-bar-fill {
+						width: 0%;
+						height: 10px;
+						background-color: #3498db;
+						transition: width 0.5s;
+				}
+				button {
+						background-color: #2ecc71;
+						border: none;
+						color: white;
+						padding: 10px 20px;
+						text-align: center;
+						text-decoration: none;
+						display: block;
+						font-size: 16px;
+						margin: 20px auto 0;
+						cursor: pointer;
+						border-radius: 5px;
+						transition: background-color 0.3s;
+				}
+				button:hover {
+						background-color: #27ae60;
+				}
+				#status {
+						text-align: center;
+						margin-top: 10px;
+						font-style: italic;
+				}
+				.theme-toggle {
+						position: absolute;
+						top: 20px;
+						right: 20px;
+						background: none;
+						border: none;
+						cursor: pointer;
+						font-size: 24px;
+						transition: transform 0.3s;
+				}
+				.theme-toggle:hover {
+						transform: scale(1.1);
+				}
+		</style>
 </head>
-<body>
-    <div class="container">
-        <h1>Speed Test</h1>
-        <div class="test-container">
-            <div class="test-header">
-                <span class="test-type">Download</span>
-                <span id="downloadSpeed" class="speed-result">- Mbps</span>
-            </div>
-            <div class="progress-bar">
-                <div id="downloadProgress" class="progress-bar-fill"></div>
-            </div>
-        </div>
-        <div class="test-container">
-            <div class="test-header">
-                <span class="test-type">Upload</span>
-                <span id="uploadSpeed" class="speed-result">- Mbps</span>
-            </div>
-            <div class="progress-bar">
-                <div id="uploadProgress" class="progress-bar-fill"></div>
-            </div>
-        </div>
-        <button id="startTest">Start Speed Test</button>
-        <div id="status"></div>
-    </div>
+<body class="light-mode">
+		<button id="themeToggle" class="theme-toggle">☀️</button>
+		<div class="container">
+				<h1>Speed Test</h1>
+				<div class="test-container">
+						<div class="test-header">
+								<span class="test-type">Download</span>
+								<span id="downloadSpeed" class="speed-result">- Mbps</span>
+						</div>
+						<div class="progress-bar">
+								<div id="downloadProgress" class="progress-bar-fill"></div>
+						</div>
+				</div>
+				<div class="test-container">
+						<div class="test-header">
+								<span class="test-type">Upload</span>
+								<span id="uploadSpeed" class="speed-result">- Mbps</span>
+						</div>
+						<div class="progress-bar">
+								<div id="uploadProgress" class="progress-bar-fill"></div>
+						</div>
+				</div>
+				<button id="startTest">Start Speed Test</button>
+				<div id="status"></div>
+		</div>
 
-    <script>
-        const startButton = document.getElementById('startTest');
-        const downloadSpeedElement = document.getElementById('downloadSpeed');
-        const uploadSpeedElement = document.getElementById('uploadSpeed');
-        const downloadProgressElement = document.getElementById('downloadProgress');
-        const uploadProgressElement = document.getElementById('uploadProgress');
-        const statusElement = document.getElementById('status');
+		<script>
+			const startButton = document.getElementById('startTest');
+			const downloadSpeedElement = document.getElementById('downloadSpeed');
+			const uploadSpeedElement = document.getElementById('uploadSpeed');
+			const downloadProgressElement = document.getElementById('downloadProgress');
+			const uploadProgressElement = document.getElementById('uploadProgress');
+			const statusElement = document.getElementById('status');
 
-        startButton.addEventListener('click', runSpeedTest);
+			startButton.addEventListener('click', runSpeedTest);
 
-        async function runSpeedTest() {
-            startButton.disabled = true;
-            downloadSpeedElement.textContent = '- Mbps';
-            uploadSpeedElement.textContent = '- Mbps';
-            downloadProgressElement.style.width = '0%';
-            uploadProgressElement.style.width = '0%';
+			async function runSpeedTest() {
+					startButton.disabled = true;
+					downloadSpeedElement.textContent = '- Mbps';
+					uploadSpeedElement.textContent = '- Mbps';
+					downloadProgressElement.style.width = '0%';
+					uploadProgressElement.style.width = '0%';
 
-            await testDownloadSpeed();
-            await testUploadSpeed();
+					await testDownloadSpeed();
+					await testUploadSpeed();
 
-            startButton.disabled = false;
-            statusElement.textContent = 'Test completed!';
-        }
+					startButton.disabled = false;
+					statusElement.textContent = 'Test completed!';
+			}
 
-        async function testDownloadSpeed() {
-            const testDuration = 5000; // 5 seconds
-            const chunkSize = 1000000; // 1 MB
-            let totalBytesLoaded = 0;
-            const startTime = new Date().getTime();
+			async function testDownloadSpeed() {
+					const testDuration = 5000; // 5 seconds
+					const chunkSize = 1000000; // 1 MB
+					let totalBytesLoaded = 0;
+					const startTime = new Date().getTime();
 
-            statusElement.textContent = 'Testing download speed...';
+					statusElement.textContent = 'Testing download speed...';
 
-            try {
-                while (new Date().getTime() - startTime < testDuration) {
-                    const response = await fetch('https://speed.cloudflare.com/__down?bytes=' + chunkSize);
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    const data = await response.arrayBuffer();
-                    totalBytesLoaded += data.byteLength;
-                    
-                    const elapsedTime = new Date().getTime() - startTime;
-                    const progress = Math.min((elapsedTime / testDuration) * 100, 100);
-                    downloadProgressElement.style.width = progress + '%';
+					try {
+							while (new Date().getTime() - startTime < testDuration) {
+									const response = await fetch('https://speed.cloudflare.com/__down?bytes=' + chunkSize);
+									if (!response.ok) throw new Error('Network response was not ok');
+									const data = await response.arrayBuffer();
+									totalBytesLoaded += data.byteLength;
 
-                    const speedMbps = ((totalBytesLoaded * 8 / 1000000) / (elapsedTime / 1000)).toFixed(2);
-                    downloadSpeedElement.textContent = speedMbps + ' Mbps';
-                }
-            } catch (error) {
-                statusElement.textContent = 'An error occurred during the download test.';
-                console.error('Error:', error);
-            }
-        }
+									const elapsedTime = new Date().getTime() - startTime;
+									const progress = Math.min((elapsedTime / testDuration) * 100, 100);
+									downloadProgressElement.style.width = progress + '%';
 
-        async function testUploadSpeed() {
-            const testDuration = 5000; // 5 seconds
-            const chunkSize = 1000000; // 1 MB
-            let totalBytesUploaded = 0;
-            const startTime = new Date().getTime();
+									const speedMbps = ((totalBytesLoaded * 8 / 1000000) / (elapsedTime / 1000)).toFixed(2);
+									downloadSpeedElement.textContent = speedMbps + ' Mbps';
+							}
+					} catch (error) {
+							statusElement.textContent = 'An error occurred during the download test.';
+							console.error('Error:', error);
+					}
+			}
 
-            statusElement.textContent = 'Testing upload speed...';
+			async function testUploadSpeed() {
+					const testDuration = 5000; // 5 seconds
+					const chunkSize = 1000000; // 1 MB
+					let totalBytesUploaded = 0;
+					const startTime = new Date().getTime();
 
-            try {
-                const chunk = new ArrayBuffer(chunkSize);
-                while (new Date().getTime() - startTime < testDuration) {
-                    const response = await fetch('https://speed.cloudflare.com/__up', {
-                        method: 'POST',
-                        body: chunk
-                    });
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    totalBytesUploaded += chunkSize;
-                    
-                    const elapsedTime = new Date().getTime() - startTime;
-                    const progress = Math.min((elapsedTime / testDuration) * 100, 100);
-                    uploadProgressElement.style.width = progress + '%';
+					statusElement.textContent = 'Testing upload speed...';
 
-                    const speedMbps = ((totalBytesUploaded * 8 / 1000000) / (elapsedTime / 1000)).toFixed(2);
-                    uploadSpeedElement.textContent = speedMbps + ' Mbps';
-                }
-            } catch (error) {
-                statusElement.textContent = 'An error occurred during the upload test.';
-                console.error('Error:', error);
-            }
-        }
-    </script>
+					try {
+							const chunk = new ArrayBuffer(chunkSize);
+							while (new Date().getTime() - startTime < testDuration) {
+									const response = await fetch('https://speed.cloudflare.com/__up', {
+											method: 'POST',
+											body: chunk
+									});
+									if (!response.ok) throw new Error('Network response was not ok');
+									totalBytesUploaded += chunkSize;
+
+									const elapsedTime = new Date().getTime() - startTime;
+									const progress = Math.min((elapsedTime / testDuration) * 100, 100);
+									uploadProgressElement.style.width = progress + '%';
+
+									const speedMbps = ((totalBytesUploaded * 8 / 1000000) / (elapsedTime / 1000)).toFixed(2);
+									uploadSpeedElement.textContent = speedMbps + ' Mbps';
+							}
+					} catch (error) {
+							statusElement.textContent = 'An error occurred during the upload test.';
+							console.error('Error:', error);
+					}
+			}
+
+				// Dark mode toggle functionality
+				const themeToggle = document.getElementById('themeToggle');
+				const body = document.body;
+
+				themeToggle.addEventListener('click', () => {
+						body.classList.toggle('dark-mode');
+						body.classList.toggle('light-mode');
+						themeToggle.textContent = body.classList.contains('dark-mode') ? '🌙' : '☀️';
+				});
+		</script>
 </body>
 </html>
