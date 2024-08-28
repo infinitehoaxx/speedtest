@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comprehensive Speed Test</title>
+    <title>Comprehensive Speed Test with Gaming Analysis</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -35,11 +35,11 @@
             background-color: #333;
             box-shadow: 0 4px 6px rgba(255,255,255,0.1);
         }
-        h1 {
+        h1, h2 {
             text-align: center;
             color: #2c3e50;
         }
-        .dark-mode h1 {
+        .dark-mode h1, .dark-mode h2 {
             color: #ecf0f1;
         }
         .test-container {
@@ -113,6 +113,29 @@
         .theme-toggle:hover {
             transform: scale(1.1);
         }
+        .analysis {
+            margin-top: 20px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #ecf0f1;
+            transition: background-color 0.3s;
+        }
+        .dark-mode .analysis {
+            background-color: #34495e;
+        }
+        .analysis-result {
+            font-weight: bold;
+        }
+        .very-good { color: #27ae60; }
+        .good { color: #2ecc71; }
+        .average { color: #f39c12; }
+        .not-so-good { color: #e67e22; }
+        .terrible { color: #c0392b; }
+        .dark-mode .very-good { color: #2ecc71; }
+        .dark-mode .good { color: #27ae60; }
+        .dark-mode .average { color: #f1c40f; }
+        .dark-mode .not-so-good { color: #e67e22; }
+        .dark-mode .terrible { color: #e74c3c; }
     </style>
 </head>
 <body class="light-mode">
@@ -151,6 +174,14 @@
         </div>
         <button id="startTest">Start Speed Test</button>
         <div id="status"></div>
+        <div class="analysis">
+            <h2>Gaming Analysis</h2>
+            <p>For gaming, the most crucial metric is <strong>unloaded latency</strong>. Here's how your connection rates for gaming:</p>
+            <p>Unloaded Latency: <span id="latencyAnalysis" class="analysis-result"></span></p>
+            <p>Download Speed: <span id="downloadAnalysis" class="analysis-result"></span></p>
+            <p>Upload Speed: <span id="uploadAnalysis" class="analysis-result"></span></p>
+            <p>Overall Gaming Experience: <span id="overallAnalysis" class="analysis-result"></span></p>
+        </div>
     </div>
 
     <script>
@@ -174,10 +205,12 @@
             downloadProgressElement.style.width = '0%';
             uploadProgressElement.style.width = '0%';
 
-            await testUnloadedLatency();
-            await testDownloadSpeed();
-            await testUploadSpeed();
+            const unloadedLatency = await testUnloadedLatency();
+            const downloadSpeed = await testDownloadSpeed();
+            const uploadSpeed = await testUploadSpeed();
             await testLoadedLatency();
+
+            analyzeForGaming(unloadedLatency, downloadSpeed, uploadSpeed);
 
             startButton.disabled = false;
             statusElement.textContent = 'Test completed!';
@@ -187,6 +220,7 @@
             statusElement.textContent = 'Testing unloaded latency...';
             const latency = await measureLatency();
             unloadedLatencyElement.textContent = latency + ' ms';
+            return latency;
         }
 
         async function testLoadedLatency() {
@@ -236,6 +270,7 @@
                 statusElement.textContent = 'An error occurred during the download test.';
                 console.error('Error:', error);
             }
+            return parseFloat(downloadSpeedElement.textContent);
         }
 
         async function testUploadSpeed() {
@@ -267,6 +302,45 @@
                 statusElement.textContent = 'An error occurred during the upload test.';
                 console.error('Error:', error);
             }
+            return parseFloat(uploadSpeedElement.textContent);
+        }
+
+        function analyzeForGaming(unloadedLatency, downloadSpeed, uploadSpeed) {
+            const latencyRating = getRating(unloadedLatency, [20, 50, 100, 150]);
+            const downloadRating = getRating(downloadSpeed, [100, 50, 25, 10]);
+            const uploadRating = getRating(uploadSpeed, [25, 10, 5, 1]);
+
+            document.getElementById('latencyAnalysis').textContent = `${unloadedLatency} ms (${latencyRating})`;
+            document.getElementById('latencyAnalysis').className = `analysis-result ${latencyRating.toLowerCase().replace(' ', '-')}`;
+
+            document.getElementById('downloadAnalysis').textContent = `${downloadSpeed} Mbps (${downloadRating})`;
+            document.getElementById('downloadAnalysis').className = `analysis-result ${downloadRating.toLowerCase().replace(' ', '-')}`;
+
+            document.getElementById('uploadAnalysis').textContent = `${uploadSpeed} Mbps (${uploadRating})`;
+            document.getElementById('uploadAnalysis').className = `analysis-result ${uploadRating.toLowerCase().replace(' ', '-')}`;
+
+            const overallRating = getOverallRating(latencyRating, downloadRating, uploadRating);
+            document.getElementById('overallAnalysis').textContent = overallRating;
+            document.getElementById('overallAnalysis').className = `analysis-result ${overallRating.toLowerCase().replace(' ', '-')}`;
+        }
+
+        function getRating(value, thresholds) {
+            const ratings = ['Very Good', 'Good', 'Average', 'Not So Good', 'Terrible'];
+            for (let i = 0; i < thresholds.length; i++) {
+                if (value <= thresholds[i]) {
+                    return ratings[i];
+                }
+            }
+            return ratings[ratings.length - 1];
+        }
+
+        function getOverallRating(latencyRating, downloadRating, uploadRating) {
+            const ratings = ['Very Good', 'Good', 'Average', 'Not So Good', 'Terrible'];
+            const ratingValues = ratings.map(rating => ratings.indexOf(rating));
+            const averageRating = (ratingValues[ratings.indexOf(latencyRating)] * 2 +
+                                   ratingValues[ratings.indexOf(downloadRating)] +
+                                   ratingValues[ratings.indexOf(uploadRating)]) / 4;
+            return ratings[Math.round(averageRating)];
         }
 
         // Dark mode toggle functionality
