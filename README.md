@@ -74,9 +74,9 @@ You can customize various aspects of the speed test website:
 Contributions to improve the speed test website are welcome. Please follow these steps:
 
 1. Fork the repository.
-2. Create a new branch for your feature (`git checkout -b feature/AmazingFeature`).
+2. Create a new branch for your feature (`git checkout -b infinitehoaxx/speedtest`).
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin feature/AmazingFeature`).
+4. Push to the branch (`git push origin infinitehoaxx/speedtest`).
 5. Open a Pull Request.
 
 ## License
