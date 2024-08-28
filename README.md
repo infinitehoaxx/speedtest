@@ -1,4 +1,4 @@
-# Speed Test Website with Dark Mode
+# Comprehensive Speed Test Website with Dark Mode
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -13,12 +13,14 @@
 
 ## Introduction
 
-This project is a simple, yet effective speed test website that allows users to measure their internet download and upload speeds. It features a clean, modern interface with the added functionality of a dark mode toggle for enhanced user experience.
+This project is a comprehensive speed test website that allows users to measure their internet download and upload speeds, as well as network latency under both loaded and unloaded conditions. It features a clean, modern interface with the added functionality of a dark mode toggle for enhanced user experience.
 
 ## Features
 
 - **Download Speed Test**: Measures the user's download speed in Mbps.
 - **Upload Speed Test**: Measures the user's upload speed in Mbps.
+- **Unloaded Latency Test**: Measures network latency without load.
+- **Loaded Latency Test**: Measures network latency under load conditions.
 - **Real-time Progress**: Displays progress bars for both download and upload tests.
 - **Dark Mode Toggle**: Allows users to switch between light and dark themes.
 - **Responsive Design**: Adapts to different screen sizes for optimal viewing on various devices.
@@ -45,9 +47,9 @@ No additional dependencies or build steps are required.
 ## Usage
 
 1. Open the website in a web browser.
-2. Click the "Start Speed Test" button to begin the test.
-3. Wait for both download and upload tests to complete.
-4. View your results displayed in Mbps.
+2. Click the "Start Speed Test" button to begin the comprehensive test.
+3. Wait for all tests (unloaded latency, download, upload, loaded latency) to complete.
+4. View your results displayed in Mbps for speeds and ms for latencies.
 5. To switch between light and dark modes, click the sun/moon icon in the top-right corner.
 
 ## How It Works
@@ -56,6 +58,11 @@ No additional dependencies or build steps are required.
 - The speed test uses the Cloudflare Speed Test API to measure download and upload speeds.
 - It performs a series of downloads and uploads over a 5-second period for each test.
 - The speed is calculated based on the amount of data transferred in the given time.
+
+### Latency Test
+- Unloaded latency is measured by sending a small (1 byte) request to the server.
+- Loaded latency is measured by sending a larger (1 MB) request to simulate network under load.
+- The time difference between sending the request and receiving the response is calculated as latency.
 
 ### Dark Mode
 - The dark mode toggle uses CSS classes to switch between light and dark themes.
@@ -68,15 +75,16 @@ You can customize various aspects of the speed test website:
 1. **Colors**: Modify the CSS variables in the `<style>` section to change the color scheme.
 2. **Test Duration**: Adjust the `testDuration` variable in the JavaScript code to change the length of each test.
 3. **UI Elements**: Modify the HTML structure to add or remove elements as needed.
+4. **Latency Test Parameters**: Adjust the `size` variable in the `measureLatency` function to change the load for latency tests.
 
 ## Contributing
 
 Contributions to improve the speed test website are welcome. Please follow these steps:
 
 1. Fork the repository.
-2. Create a new branch for your feature (`git checkout -b infinitehoaxx/speedtest`).
+2. Create a new branch for your feature (`git checkout -b feature/AmazingFeature`).
 3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-4. Push to the branch (`git push origin infinitehoaxx/speedtest`).
+4. Push to the branch (`git push origin feature/AmazingFeature`).
 5. Open a Pull Request.
 
 ## License
